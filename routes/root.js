@@ -1,0 +1,20 @@
+'use strict'
+
+module.exports = async function (fastify, opts) {
+  fastify.get('/', function (request, reply) {
+    fastify.mysql.getConnection(onConnect)
+
+    function onConnect (err, client) {
+      if (err) return reply.send(err)
+
+      client.query(
+        'SELECT * FROM example', [],
+        function onResult (err, result) {
+          client.release()
+          reply.send(err || result)
+        }
+      )
+    }
+  })
+}
+
