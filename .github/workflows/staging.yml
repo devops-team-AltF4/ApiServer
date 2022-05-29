@@ -68,6 +68,6 @@ jobs:
         # Build a docker container and
         # push it to ECR so that it can
         # be deployed to ECS.
-        docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:latest --build-arg RDS_USERNAME=${{ secrets.RDS_USERNAME_STAG }} --build-arg RDS_PASSWORD=${{ secrets.RDS_PASSWORD_STAG }} --build-arg RDS_HOSTNAME=${{ secrets.RDS_HOSTNAME_STAG }} --build-arg RDS_DATABASE=${{ secrets.RDS_HOSTNAME_STAG }} .
+        docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:latest --build-arg RDS_USERNAME_STAG=${{ secrets.RDS_USERNAME_STAG }} --build-arg RDS_PASSWORD_STAG=${{ secrets.RDS_PASSWORD_STAG }} --build-arg RDS_HOSTNAME_STAG=${{ secrets.RDS_HOSTNAME_STAG }} --build-arg RDS_DATABASE_STAG=staging .
         docker push $ECR_REGISTRY/$ECR_REPOSITORY:latest
         echo "::set-output name=image::$ECR_REGISTRY/$ECR_REPOSITORY:latest"

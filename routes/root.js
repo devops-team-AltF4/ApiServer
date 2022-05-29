@@ -1,4 +1,5 @@
 'use strict'
+const fastify = require('fastify')()
 
 module.exports = async function (fastify, opts) {
   fastify.get('/', function (request, reply) {
@@ -17,4 +18,3 @@ module.exports = async function (fastify, opts) {
     }
   })
 }
-

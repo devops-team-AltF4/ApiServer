@@ -1,4 +1,6 @@
+
 'use strict'
+require('dotenv').config()
 
 const fp = require('fastify-plugin')
 
