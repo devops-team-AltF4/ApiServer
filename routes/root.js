@@ -8,7 +8,7 @@ module.exports = async function (fastify, opts) {
       if (err) return reply.send(err)
 
       client.query(
-        'SELECT * FROM example', [],
+        'SELECT now()', [],
         function onResult (err, result) {
           client.release()
           reply.send(err || result)
