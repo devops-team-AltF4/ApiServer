@@ -33,6 +33,14 @@ resource "aws_security_group" "load_balancer_security_group" {
   }
 
   ingress {
+    from_port        = 22
+    to_port          = 22
+    protocol         = "tcp"
+    cidr_blocks      = ["0.0.0.0/0"]
+    ipv6_cidr_blocks = ["::/0"]
+  }
+
+  ingress {
     from_port        = 3005
     to_port          = 3005
     protocol         = "tcp"
@@ -69,24 +77,25 @@ resource "aws_lb_target_group" "target_group" {
   vpc_id      = aws_vpc.aws-vpc.id
 
   health_check {
+    port = "80"
     healthy_threshold   = "3"
     interval            = "300"
     protocol            = "HTTP"
-    matcher             = "404"
+    matcher             = "200"
     timeout             = "3"
     path                = "/"
     unhealthy_threshold = "2"
   }
 
   tags = {
-    Name        = "${var.app_name}-lb-tg"
+    Name        = "${var.app_name}-lb-tg2"
     Environment = var.app_environment
   }
 }
 
 resource "aws_lb_listener" "listener" {
   load_balancer_arn = aws_alb.application_load_balancer.id
-  port              = "3005"
+  port              = "80"
   protocol          = "HTTP"
 
   default_action {

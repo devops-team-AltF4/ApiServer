@@ -12,10 +12,10 @@ jobs:
     name: "Terraform"
     runs-on: ubuntu-latest
 
-    default :
+    defaults :
       run :
         shell : bash
-        working-derectory : terraform
+        working-directory : terraform/
 
     steps:
       - name: Checkout
@@ -79,5 +79,5 @@ jobs:
         run: exit 1
 
       - name: Terraform Apply
-        if: github.ref == 'refs/heads/dev' && github.event_name == 'push'
+        if: github.ref == 'refs/heads/mainx' && github.event_name == 'push'
         run: terraform apply -auto-approve -input=false
