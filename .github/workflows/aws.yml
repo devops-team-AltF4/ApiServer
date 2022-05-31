@@ -43,6 +43,7 @@ env:
 
 permissions:
   contents: read
+  actions: read
 
 jobs:
   deploy:
@@ -77,7 +78,44 @@ jobs:
         docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG --build-arg RDS_USERNAME=${{ secrets.RDS_USERNAME }} --build-arg RDS_PASSWORD=${{ secrets.RDS_PASSWORD }} --build-arg RDS_HOSTNAME=${{ secrets.RDS_HOSTNAME }} --build-arg RDS_DATABASE=project4 .
         docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
         echo "::set-output name=image::$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG"
-        
+  slack-notification:
+      if: ${{ always() }}
+      needs: [deploy]
+      runs-on: ubuntu-latest
+      steps:
+        - name: Set CUSTOM_STATUS Env Variable
+          run: |
+            if [ "${{ needs.deploy-dev.result }}" = "failure" ] || \
+               [ "${{ needs.deploy-prod.result }}" = "failure" ];
+            then
+              CUSTOM_STATUS="❌ 실패"
+            elif [ "${{ needs.deploy-dev.result }}" = "cancelled" ] || \
+              [ "${{ needs.deploy-prod.result }}" = "cancelled" ];
+            then
+              CUSTOM_STATUS="⚠️ 취소"
+            else
+              CUSTOM_STATUS="✅ 성공"
+            fi
+
+            echo "CUSTOM_STATUS=${CUSTOM_STATUS}" >> $GITHUB_ENV
+
+        - name: slack-send
+          uses: slackapi/slack-github-action@v1.19.0
+          with:
+            payload: |
+              {
+                "custom_status": "${{ env.CUSTOM_STATUS }}",
+                "workflow": "${{ github.workflow }}",
+                "job_deploy_dev": "deploy",
+                "status_deploy_dev": "${{ needs.deploy-.result }}",
+                "actor": "${{ github.actor }}",
+                "ref_name": "${{ github.ref_name }}",
+                "head_commit_url": "${{ github.event.head_commit.url }}",
+                "action_run_url": "${{ env.ACTION_RUN_URL }}"
+              }
+          env:
+            SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+            ACTION_RUN_URL: "https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}"
 #     - name: Fill in the new image ID in the Amazon ECS task definition
 #       id: task-def
 #       uses: aws-actions/amazon-ecs-render-task-definition@v1
