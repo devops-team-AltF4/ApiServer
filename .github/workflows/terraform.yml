@@ -4,7 +4,6 @@ on:
   push:
     branches:
       - main
-      - dev
   pull_request:
 
 jobs:
@@ -12,10 +11,10 @@ jobs:
     name: "Terraform"
     runs-on: ubuntu-latest
 
-    defaults :
+    default :
       run :
         shell : bash
-        working-directory : terraform/
+        working-derectory : terraform
 
     steps:
       - name: Checkout
