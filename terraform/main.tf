@@ -12,7 +12,7 @@ terraform {
     organization = "pj4terraform"
 
     workspaces {
-      name = "Api-server"
+      name = "devcloud"
     }
   }
 }
