@@ -77,7 +77,7 @@ resource "aws_lb_target_group" "target_group" {
   vpc_id      = aws_vpc.aws-vpc.id
 
   health_check {
-    port = "80"
+    port                = "80"
     healthy_threshold   = "3"
     interval            = "300"
     protocol            = "HTTP"
