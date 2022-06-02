@@ -139,7 +139,7 @@ jobs:
           ecs-cli configure --cluster project4-dev --default-launch-type EC2 --config-name project4-dev --region ap-northeast-2
           ecs-cli configure profile --access-key ${{ secrets.AWS_ACCESS_KEY_ID }} --secret-key ${{ secrets.AWS_SECRET_ACCESS_KEY }} --profile-name project4-devapi
           ecs-cli up --keypair projectju --capability-iam --size 1 --instance-type t2.medium --cluster-config project4-dev --ecs-profile project4-devapi --vpc ${{ secrets.AWS_VPC }} --security-group ${{ secrets.AWS_SECURITY_GROUP }} --subnets ${{ secrets.AWS_SUBNETS_1 }},${{ secrets.AWS_SUBNETS_2 }} --region ap-northeast-2
-          ecs-cli compose service up --cluster-config project4-dev --ecs-profile project4-devapi --target-group-arn ${{ secrets.AWS_API_TARGET_GROUP_ARN }} --container-name api-server --container-port 80 --vpc ${{ secrets.AWS_VPC }} --launch-type EC2 --force-deployment
+          ecs-cli compose service up --cluster-config project4-dev --ecs-profile project4-devapi --target-group-arn ${{ secrets.AWS_API_TARGET_GROUP_ARN }} --container-name APIserver --container-port 80 --vpc ${{ secrets.AWS_VPC }} --launch-type EC2 --force-deployment
 #     - name: Fill in the new image ID in the Amazon ECS task definition
 #       id: task-def
 #       uses: aws-actions/amazon-ecs-render-task-definition@v1

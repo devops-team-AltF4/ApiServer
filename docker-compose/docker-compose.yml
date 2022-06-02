@@ -1,6 +1,6 @@
 version: '3'
 services:
-  api-server:
+  APIserver:
     image: 060701521359.dkr.ecr.ap-northeast-2.amazonaws.com/dev-api:94af39582bc63daa681a6bce68c6c38c697e2054
     ports:
       - "80:80"
