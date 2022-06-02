@@ -1,0 +1,6 @@
+version: 1
+task_definition:
+  task_role_arn: arn:aws:iam::060701521359:role/ecsTaskExecutionRole
+  task_execution_role: arn:aws:iam::060701521359:role/ecsTaskExecutionRole
+services:
+  api-server:

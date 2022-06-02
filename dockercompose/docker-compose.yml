@@ -1,0 +1,12 @@
+version: '3'
+services:
+  api-server:
+    image: 060701521359.dkr.ecr.ap-northeast-2.amazonaws.com/dev-api:94af39582bc63daa681a6bce68c6c38c697e2054
+    ports:
+      - "80:80"
+    logging:
+      driver: awslogs
+      options: 
+        awslogs-group: api-server
+        awslogs-region: ap-northeast-2
+        awslogs-stream-prefix: api-server
