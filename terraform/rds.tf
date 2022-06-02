@@ -9,17 +9,18 @@ resource "aws_db_subnet_group" "terraform_db_subnet" {
 }
 
 # 6-2. RDS 생성
-resource "aws_db_instance" "dev-mysql" {
-  identifier           = "dev-mysql"
+resource "aws_db_instance" "project4-db-dev" {
+  identifier           = "project4-db-dev"
   allocated_storage    = 20
   storage_type         = "gp2"
   engine               = "mysql"
   engine_version       = "8.0.28"
   instance_class       = "db.t2.micro"
-  name                 = "dev-db"
+  name                 = ""
   username             = "admin"
   password             = "12345678"
-  parameter_group_name = "default.mysql5.7"
+  parameter_group_name = "default.mysql8.0"
+  availability_zone    = "ap-northeast-2b"
   skip_final_snapshot  = true
   publicly_accessible  = true
   db_subnet_group_name = aws_db_subnet_group.terraform_db_subnet.id
