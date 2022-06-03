@@ -49,9 +49,9 @@ jobs:
         if: github.ref == 'refs/heads/main' && github.event_name == 'push'
         run: terraform apply -auto-approve -input=false
 
-# env:
-#   AWS_REGION: ap-northeast-2                   # set this to your preferred AWS region, e.g. us-west-1
-#   ECR_REPOSITORY: dev-api           # set this to your Amazon ECR repository name
+#env:
+#  AWS_REGION: ap-northeast-2                   # set this to your preferred AWS region, e.g. us-west-1
+#  ECR_REPOSITORY: dev-api           # set this to your Amazon ECR repository name
 #   ECS_SERVICE: project4-service                 # set this to your Amazon ECS service name
 #   ECS_CLUSTER: project4-dev                 # set this to your Amazon ECS cluster name
 #   ECS_TASK_DEFINITION: .aws/task-definition.json # set this to the path to your Amazon ECS task definition
@@ -59,7 +59,9 @@ jobs:
 #  CONTAINER_NAME: apiserver          # set this to the name of the container in the
                                                # containerDefinitions section of your task definition
 
-
+#permissions:
+#  contents: read
+#  actions: read
 
   deploy:
     name: Deploy
@@ -153,5 +155,5 @@ jobs:
         run: |
           ecs-cli configure --cluster project4-dev --default-launch-type EC2 --config-name project4-dev --region ap-northeast-2
           ecs-cli configure profile --access-key ${{ secrets.AWS_ACCESS_KEY_ID }} --secret-key ${{ secrets.AWS_SECRET_ACCESS_KEY }} --profile-name project4-dev
-          ecs-cli up --keypair projectju --capability-iam --size 1 --instance-type t2.medium --cluster-config project4-dev --ecs-profile project4-dev --vpc ${{ secrets.AWS_VPC }} --security-group ${{ secrets.AWS_SECURITY_GROUP }} --subnets ${{ secrets.AWS_SUBNETS_1 }},${{ secrets.AWS_SUBNETS_2 }} --region ap-northeast-2
-          ecs-cli compose service up --cluster-config project4-dev --ecs-profile project4-dev --target-group-arn ${{ secrets.AWS_API_TARGET_GROUP_ARN }} --container-name APIserver --container-port 80 --vpc ${{ secrets.AWS_VPC }} --launch-type EC2
+        #  ecs-cli up --keypair projectju --capability-iam --size 1 --instance-type t2.medium --cluster-config project4-dev --ecs-profile project4-dev --vpc ${{ secrets.AWS_VPC }} --security-group ${{ secrets.AWS_SECURITY_GROUP }} --subnets ${{ secrets.AWS_SUBNETS_1 }},${{ secrets.AWS_SUBNETS_2 }} --region ap-northeast-2
+        #  ecs-cli compose service up --cluster-config project4-dev --ecs-profile project4-dev --target-group-arn ${{ secrets.AWS_API_TARGET_GROUP_ARN }} --container-name APIserver --container-port 80 --vpc ${{ secrets.AWS_VPC }} --launch-type EC2
