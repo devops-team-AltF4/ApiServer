@@ -63,6 +63,7 @@ jobs:
 
   deploy:
     name: Deploy
+    needs: [terraform]
     runs-on: ubuntu-latest
     environment: dev
 
