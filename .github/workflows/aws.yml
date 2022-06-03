@@ -107,7 +107,7 @@ jobs:
                 "custom_status": "${{ env.CUSTOM_STATUS }}",
                 "workflow": "${{ github.workflow }}",
                 "job_deploy_dev": "deploy",
-                "status_deploy_dev": "${{ needs.deploy-.result }}",
+                "status_deploy_dev": "${{ needs.deploy.result }}",
                 "actor": "${{ github.actor }}",
                 "ref_name": "${{ github.ref_name }}",
                 "head_commit_url": "${{ github.event.head_commit.url }}",
