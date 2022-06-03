@@ -1,0 +1,31 @@
+version: '3'
+services:
+  node-app:
+    image: 060701521359.dkr.ecr.ap-northeast-2.amazonaws.com/pj4-auth
+    ports:
+      - "3005:3005"
+    networks:
+      - web-net
+    links:
+      - redis
+    logging:
+      driver: awslogs
+      options: 
+        awslogs-group: redisdev
+        awslogs-region: ap-northeast-2
+        awslogs-stream-prefix: auth
+
+  redis:
+    image: redis
+    ports:
+      - "6379:6379"
+    networks:
+      - web-net
+    logging:
+      driver: awslogs
+      options:
+        awslogs-group: redisdev
+        awslogs-region: ap-northeast-2
+        awslogs-stream-prefix: redis
+networks:
+  web-net:
