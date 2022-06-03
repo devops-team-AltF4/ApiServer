@@ -49,21 +49,18 @@ jobs:
         if: github.ref == 'refs/heads/main' && github.event_name == 'push'
         run: terraform apply -auto-approve -input=false
 
-env:
-  AWS_REGION: ap-northeast-2                   # set this to your preferred AWS region, e.g. us-west-1
-  ECR_REPOSITORY: dev-api           # set this to your Amazon ECR repository name
+# env:
+#   AWS_REGION: ap-northeast-2                   # set this to your preferred AWS region, e.g. us-west-1
+#   ECR_REPOSITORY: dev-api           # set this to your Amazon ECR repository name
 #   ECS_SERVICE: project4-service                 # set this to your Amazon ECS service name
 #   ECS_CLUSTER: project4-dev                 # set this to your Amazon ECS cluster name
 #   ECS_TASK_DEFINITION: .aws/task-definition.json # set this to the path to your Amazon ECS task definition
                                                # file, e.g. .aws/task-definition.json
-  CONTAINER_NAME: apiserver          # set this to the name of the container in the
+#  CONTAINER_NAME: apiserver          # set this to the name of the container in the
                                                # containerDefinitions section of your task definition
 
-permissions:
-  contents: read
-  actions: read
 
-jobs:
+
   deploy:
     name: Deploy
     runs-on: ubuntu-latest
