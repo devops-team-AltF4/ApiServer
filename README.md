@@ -80,11 +80,11 @@ module.exports = async function (fastify, opts) {
 
 ## **빌드시 주의 사항** 
 
-Dockerfile로 빌드를 하고자 할 때는 환경변수 값을 넣어주어야 합니다.
+Dockerfile로 빌드를 하고자 할 때는 환경변수 값을 넣어주어야 합니다. (Git action으로 build할 때 secret key로 처리가능)
 
 
 ```
-docker build -t 도커사용자명/api-server:$IMAGE_TAG --build-arg RDS_USERNAME= RDS유저이름 --build-arg RDS_PASSWORD= RDS 비밀번호 --build-arg RDS_HOSTNAME= RDS주소 --build-arg RDS_DATABASE= 사용할 데이터베이스 .
+docker build -t 도커사용자명/api-server:$IMAGE_TAG --build-arg RDS_USERNAME= RDS유저이름 --build-arg RDS_PASSWORD= RDS 비밀번호 --build-arg RDS_HOSTNAME= RDS주소 --build-arg RDS_DATABASE= 사용할 데이터베이스 . 
 ```
 
 ## package.json
@@ -112,3 +112,9 @@ insert into example(name, phone, id, city) values('홍길동', '010-1234-1234', 
 
 select * from example;
 ```
+## 참조문서
+
+fastify_address 관련
+
+https://github.com/fastify/fastify-cli
+```For containers built and run specifically by the Docker Daemon, fastify-cli is able to detect that the server process is running within a Docker container and the 0.0.0.0 listen address is set```
