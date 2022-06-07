@@ -31,6 +31,29 @@ fastify generate .
 ```
 
 ## ApiServer/plugins/mysql.js 
+1. dev
+```
+
+'use strict'
+require('dotenv').config()
+
+const fp = require('fastify-plugin')
+
+module.exports = fp(async function (fastify, opts) {
+  const username = process.env.RDS_USERNAME
+  const password = process.env.RDS_PASSWORD
+  const hostname = process.env.RDS_HOSTNAME
+  const database = process.env.RDS_DATABASE
+
+  console.log(process.env)
+
+  fastify.register(require('@fastify/mysql'), {
+    connectionString: `mysql://${username}:${password}@${hostname}/${database}`
+  })
+})
+```
+
+2. staging, production
 
 ```
 
@@ -55,6 +78,9 @@ module.exports = fp(async function (fastify, opts) {
 ```
 
 ## ApiServer/routes/root.js 
+
+1. dev
+
 ```
 'use strict'
 const fastify = require('fastify')()
@@ -67,7 +93,7 @@ module.exports = async function (fastify, opts) {
       if (err) return reply.send(err)
 
       client.query(
-        'SELECT now()', [],                     //mysql 
+        'SELECT * FROM project4', [],                     
         function onResult (err, result) {
           client.release()
           reply.send(err || result)
@@ -78,13 +104,42 @@ module.exports = async function (fastify, opts) {
 }
 ```
 
-## **빌드시 주의 사항** 
+2. staging, proudction
+```
+'use strict'
+const fastify = require('fastify')()
+
+module.exports = async function (fastify, opts) {
+  fastify.get('/', function (request, reply) {
+    fastify.mysql.getConnection(onConnect)
+
+    function onConnect (err, client) {
+      if (err) return reply.send(err)
+
+      client.query(
+        'SELECT now()', [],                     //mysql에 있는 now()값을 가져오기
+        function onResult (err, result) {
+          client.release()
+          reply.send(err || result)
+        }
+      )
+    }
+  })
+}
+```
+
+## > ⚠️ **Warning 빌드시 주의 사항**
 
 Dockerfile로 빌드를 하고자 할 때는 환경변수 값을 넣어주어야 합니다. (Git action으로 build할 때 secret key로 처리가능)
 
 
 ```
 docker build -t 도커사용자명/api-server:$IMAGE_TAG --build-arg RDS_USERNAME= RDS유저이름 --build-arg RDS_PASSWORD= RDS 비밀번호 --build-arg RDS_HOSTNAME= RDS주소 --build-arg RDS_DATABASE= 사용할 데이터베이스 . 
+```
+
+gitAction상에서는 다음과 같이 명세해주어야 합니다.
+```
+docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG --build-arg RDS_USERNAME=${{ secrets.RDS_USERNAME }} --build-arg RDS_PASSWORD=${{ secrets.RDS_PASSWORD }} --build-arg RDS_HOSTNAME=${{ secrets.RDS_HOSTNAME }} --build-arg RDS_DATABASE=project4 .
 ```
 
 ## package.json
@@ -96,25 +151,30 @@ fastify_address=0.0.0.0 으로 설정해 두어야 합니다.
     "start": "FASTIFY_ADDRESS=0.0.0.0 fastify start -l info -p 80 app.js",
     "dev": "fastify start -w -l info -P app.js"
 ```
+``` -p 80 ``` 를 사용안한다면 기본값으로 포트는 3000으로 잡힙니다.
 
-## RDS에 값 넣기
+## RDS에 값 넣기(dev)
+```
+create table example (name varchar(10), phone varchar(15), id varchar(10), city varchar(10)); //table생성하기
+
+show tables; //table 조회하기
+
+insert into example(name, phone, id, city) values('홍길동', '010-1234-1234', '102' , '수원'); //데이터 넣기
+
+select * from example;	//데이터 확인
 
 ```
-CREATE DATABASE project4 default CHARACTER SET UTF8;
 
-use project4
+## RDS에 값 넣기(staging, production)
 
-create table example (name varchar(10), phone varchar(15), id varchar(10), city varchar(10));
+```
+set time_zone='Asia/Seoul';
 
-select * from example;
-
-insert into example(name, phone, id, city) values('홍길동', '010-1234-1234', '102' , '수원');
-
-select * from example;
+select now();
 ```
 ## 참조문서
 
 fastify_address 관련
 
-https://github.com/fastify/fastify-cli
+https://github.com/fastify/fastify-cli  
 ```For containers built and run specifically by the Docker Daemon, fastify-cli is able to detect that the server process is running within a Docker container and the 0.0.0.0 listen address is set```
