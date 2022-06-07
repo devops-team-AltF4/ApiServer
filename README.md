@@ -1,7 +1,7 @@
 # ApiServer
 
 ## 프로젝트 목표
-APIServer repository에서의 프로젝트 목표는 개발환경 별 Test, Deploy 과정에서 어디에 더 중점적으로 다루냐에 따라 Dev 환경과 Staging, Production 환경에서의 아키텍처를 목적에 맞게 설계하였습니다. 개발자들의 입장에서 컨테이너 내부 디버깅을 위한 환경 구축을 위해 EC2 클러스터 기반으로 돌아가도록 구성하였으며, Staging, Production의 경우 Auto Scailing과정에 있어 무중단배포가 가능하도록 구성하였습니다.
+APIServer repository에서의 프로젝트 목표는 개발환경 별 Test, Deploy 과정에서 어디에 더 중점적으로 다루냐에 따라 Dev 환경과 Staging, Production 환경에서의 아키텍처를 목적에 맞게 설계하였습니다. 개발자들의 입장에서 컨테이너 내부 디버깅을 위한 환경 구축을 위해 EC2 클러스터 기반으로 돌아가도록 구성하였으며, Staging, Production의 경우 Downtime 없는 배포를 위한  구성하였습니다.
 ## SA(시스템 아키텍처)
 **Staging & Production**
 ![image](https://user-images.githubusercontent.com/50416571/171989065-db6b82e6-b6ec-4049-8776-01c7f7e441e8.png)
